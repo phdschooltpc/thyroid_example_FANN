@@ -2,7 +2,7 @@
 Machine learning example to be compiled and run on a workstation that has FANN installed 
 
 ## How to use
-Ensure that you have FANN installed in your workstation.
+Ensure that you have [FANN installed](http://leenissen.dk/fann/wp/help/installing-fann/) in your workstation.
 
 Compile the files using the makefile.
 
@@ -60,8 +60,7 @@ into header files and use them in your embedded application
 
 
 
-![vs logo](https://orig00.deviantart.net/4075/f/2009/364/3/a/mortal_kombat_logo_by_unmanuel.png "vs logo")
-
+#
 Why use headers? 
 
 Some people claim that a magic SD card can be of help...
@@ -69,3 +68,6 @@ Some people claim that a magic SD card can be of help...
 Some disagree
 
 Pick your side....and fight!!
+
+
+![vs logo](https://orig00.deviantart.net/4075/f/2009/364/3/a/mortal_kombat_logo_by_unmanuel.png "vs logo")
