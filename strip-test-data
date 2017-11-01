@@ -11,6 +11,11 @@ fi
 
 TEST_FILE="$1"
 
+if ! [ -e "$1" ]; then
+	echo "$1: no such file"
+	exit
+fi
+
 TEST_HEADER_NAME="${TEST_FILE%.*}_test"
 TEST_HEADER_FILE="${TEST_HEADER_NAME}.h"
 
@@ -28,6 +33,8 @@ printf "#ifndef " > $TEST_HEADER_FILE
 printf "__%s__\n" "$TEST_HEADER_NAME" | tr '/a-z/' '/A-Z/' >> $TEST_HEADER_FILE
 printf "#define " >> $TEST_HEADER_FILE
 printf "__%s__\n" "$TEST_HEADER_NAME" | tr '/a-z/' '/A-Z/' >> $TEST_HEADER_FILE
+printf "\n" >> $TEST_HEADER_FILE
+printf "#include <stdint.h>\n" >> $TEST_HEADER_FILE
 printf "\n\n" >> $TEST_HEADER_FILE
 
 ################################################################################
@@ -62,7 +69,8 @@ while IFS='' read -r line || [[ -n "$line" ]]; do
 			printf "uint8_t %s = %s;\n" "$var_name" "$n" >> $TEST_HEADER_FILE
 		done
 		printf "\n" >> $TEST_HEADER_FILE
-		printf "%s %s [][%s] = {\n" "$IN_TYPE" "$IN_NAME" "$NUM_INPUT" >> $TEST_HEADER_FILE
+		printf "#pragma PERSISTENT(%s) // Place data in FRAM\n" "${IN_NAME}" >> $TEST_HEADER_FILE
+		printf "%s %s [%s][%s] = {\n" "$IN_TYPE" "$IN_NAME" "$NUM_DATA" "$NUM_INPUT" >> $TEST_HEADER_FILE
 	else
 		if [[ $read_in == "1" ]]; then
 			((in_count++))
@@ -99,7 +107,8 @@ while IFS='' read -r line || [[ -n "$line" ]]; do
 
 	if [[ $first == "1" ]]; then
 		first=0
-		printf "%s %s [][%s] = {\n" "$OUT_TYPE" "$OUT_NAME" "$NUM_OUTPUT" >> $TEST_HEADER_FILE
+		printf "#pragma PERSISTENT(%s) // Place data in FRAM\n" "${OUT_NAME}" >> $TEST_HEADER_FILE
+		printf "%s %s [%s][%s] = {\n" "$OUT_TYPE" "$OUT_NAME" "$NUM_DATA" "$NUM_OUTPUT" >> $TEST_HEADER_FILE
 	else
 		if [[ $read_in == "1" ]]; then
 			read_in=0
